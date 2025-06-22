@@ -3,13 +3,12 @@ import index from "./client/index.html";
 import trpcServer from "./server/trpc";
 
 const server = serve({
-  fetch(req, server) {
-    // Switch the request to a WebSocket connection if valid
-    const url = new URL(req.url);
-    if (url.pathname === "/ws") {
+  fetch: (req, server) => {
+    if (new URL(req.url).pathname === "/ws") {
       server.upgrade(req);
       return undefined;
     }
+    return fetch(req);
   },
   routes: {
     // Serve index.html for all unmatched routes.
@@ -34,4 +33,4 @@ const server = serve({
   },
 });
 
-console.log(`🚀 Server running at ${server.url}, env:${process.env.NODE_ENV}`);
+console.log(`🚀 ${process.env.NODE_ENV} server running at ${server.url}`);
