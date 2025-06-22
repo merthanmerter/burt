@@ -3,9 +3,15 @@ import { z } from "zod";
 import { trpc } from "./lib/trpc";
 
 export function APITester() {
+  const [isLoading, setLoading] = useState(true);
+  const [user, setUser] = useState<Awaited<
+    ReturnType<typeof trpc.users.find.query>
+  > | null>(null);
+
   const [users, setUsers] = useState<
-    Awaited<ReturnType<typeof trpc.getUsers.query>>
+    Awaited<ReturnType<typeof trpc.users.list.query>>
   >([]);
+
   const apiResponseInputRef = useRef<HTMLInputElement>(null);
   const webSocketResponseInputRef = useRef<HTMLInputElement>(null);
 
@@ -18,18 +24,44 @@ export function APITester() {
   };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const res = await trpc.getUsers.query();
-      setUsers(res);
+    const fetchData = async () => {
+      try {
+        const [userRes, usersRes] = await Promise.all([
+          trpc.users.find.query({ id: 1 }),
+          trpc.users.list.query(),
+        ]);
+        setUser(userRes);
+        setUsers(usersRes);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchUsers();
+    fetchData();
+
+    return () => {
+      socket.close();
+    };
   }, []);
 
   const socket = new WebSocket("ws://localhost:3000/ws");
   socket.addEventListener("message", (event) => {
     webSocketResponseInputRef.current!.value = event.data;
   });
+
+  if (isLoading) {
+    return (
+      <div className='skeleton-container'>
+        <div className='skeleton' />
+        <div className='skeleton' />
+        <div className='skeleton' />
+        <div className='skeleton' />
+        <div className='skeleton' />
+      </div>
+    );
+  }
 
   return (
     <div className='api-tester'>
@@ -61,6 +93,7 @@ export function APITester() {
         placeholder='WebSocket response will appear here...'
         className='response-area'
       />
+      <code className='users-list'>{JSON.stringify(user, null, 2)}</code>
       <code className='users-list'>{JSON.stringify(users, null, 2)}</code>
     </div>
   );

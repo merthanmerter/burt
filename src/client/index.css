@@ -3,7 +3,7 @@
   line-height: 1.5;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #1a1a1a;
 }
 body {
   margin: 0;
@@ -13,26 +13,7 @@ body {
   min-height: 100vh;
   position: relative;
 }
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.05;
-  background: url("./logo.svg");
-  background-size: 256px;
-  transform: rotate(-12deg) scale(1.35);
-  animation: slide 30s linear infinite;
-  pointer-events: none;
-}
-@keyframes slide {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 256px 224px;
-  }
-}
+
 .app {
   max-width: 1280px;
   margin: 0 auto;
@@ -45,32 +26,32 @@ body::before {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 .logo {
-  height: 6em;
+  height: 4em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 0.3s;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 1em #646cffaa);
 }
 .bun-logo {
   transform: scale(1.2);
 }
 .bun-logo:hover {
-  filter: drop-shadow(0 0 2em #fbf0dfaa);
+  filter: drop-shadow(0 0 1em #fbf0dfaa);
 }
 .react-logo {
   animation: spin 20s linear infinite;
 }
 .react-logo:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 1em #61dafbaa);
 }
 .trpc-logo:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 1em #61dafbaa);
 }
 @keyframes spin {
   from {
@@ -81,7 +62,7 @@ body::before {
   }
 }
 h1 {
-  font-size: 3.2em;
+  font-size: 2.2em;
   line-height: 1.1;
 }
 code {
@@ -107,7 +88,7 @@ code {
   padding: 0.75rem;
   border-radius: 12px;
   font: monospace;
-  border: 2px solid #fbf0df;
+  border: 1px solid #3b3b3b;
   transition: 0.3s;
   width: 100%;
   box-sizing: border-box;
@@ -166,7 +147,7 @@ code {
 .response-area {
   width: 100%;
   background: #1a1a1a;
-  border: 2px solid #fbf0df;
+  border: 1px solid #3b3b3b;
   border-radius: 12px;
   padding: 0.75rem;
   color: #fbf0df;
@@ -190,7 +171,7 @@ code {
   background: #1a1a1a;
   padding: 0.75rem;
   border-radius: 12px;
-  border: 2px solid #fbf0df;
+  border: 1px solid #3b3b3b;
 }
 .toast {
   position: fixed;
@@ -203,6 +184,50 @@ code {
   border-radius: 4px;
   opacity: 0.9;
   z-index: 1000;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton-container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.skeleton {
+  background: #3b3b3b;
+  width: 100%;
+  animation: skeleton-pulse 1.5s infinite;
+  border-radius: 12px;
+}
+
+.skeleton:nth-child(1) {
+  height: 54px;
+}
+
+.skeleton:nth-child(2),
+.skeleton:nth-child(3) {
+  height: 41px;
+}
+
+.skeleton:nth-child(4) {
+  height: 88px;
+}
+
+.skeleton:nth-child(5) {
+  height: 182px;
 }
 
 @media (prefers-reduced-motion) {

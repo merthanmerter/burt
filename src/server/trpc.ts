@@ -17,8 +17,18 @@ export const t = initTRPC
     transformer: superjson,
   });
 
+const middleware = t.middleware(async ({ path, next }) => {
+  // simulate loading delay
+  if (path !== "hello") {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  }
+  return await next();
+});
+
+export const publicProcedure = t.procedure.use(middleware);
+
 export const appRouter = t.router({
-  hello: t.procedure
+  hello: publicProcedure
     .input(
       z.object({
         name: z.string(),
@@ -31,16 +41,30 @@ export const appRouter = t.router({
         })
         .parse({ message: `Hello, ${input.name}` });
     }),
-  getUsers: t.procedure.query(({ ctx }) => {
-    return z
-      .array(
-        z.object({
-          id: z.number(),
-          name: z.string(),
-        }),
-      )
-      .parse(ctx.db.query("SELECT * FROM users").all());
-  }),
+  users: {
+    find: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(({ ctx, input }) => {
+        return z
+          .object({
+            id: z.number(),
+            name: z.string(),
+          })
+          .parse(
+            ctx.db.query("SELECT * FROM users WHERE id = ?").get(input.id),
+          );
+      }),
+    list: publicProcedure.query(({ ctx }) => {
+      return z
+        .array(
+          z.object({
+            id: z.number(),
+            name: z.string(),
+          }),
+        )
+        .parse(ctx.db.query("SELECT * FROM users").all());
+    }),
+  },
 });
 
 export default {
