@@ -18,7 +18,7 @@ To run for production:
 bun start
 ```
 
-To compile for production:
+To compile to a standalone binary (including react):
 
 ```bash
 bun compile && ./index
