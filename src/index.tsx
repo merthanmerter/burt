@@ -1,34 +1,22 @@
 import { serve } from "bun";
 import index from "./client/index.html";
 import trpcServer from "./server/trpc";
+import websocket from "./server/ws";
 
 const server = serve({
-  fetch: (req, server) => {
-    if (new URL(req.url).pathname === "/ws") {
+  port: 3000,
+  routes: {
+    "/": index,
+    "/trpc/*": trpcServer.fetch,
+    "/ws": (req) => {
       server.upgrade(req);
       return undefined;
-    }
-    return fetch(req);
-  },
-  routes: {
-    // Serve index.html for all unmatched routes.
-    "/*": index,
-    // Serve trpc requests
-    "/trpc/*": trpcServer.fetch,
-  },
-  websocket: {
-    async message(ws, message) {
-      console.log(`Received: ${message}`);
-      ws.send(`You said: ${message}`);
     },
-    perMessageDeflate: true,
+    "/*": () => new Response("Not found", { status: 404 }),
   },
-
+  websocket,
   development: process.env.NODE_ENV !== "production" && {
-    // Enable browser hot reloading in development
     hmr: true,
-
-    // Echo console logs from the browser to the server
     console: true,
   },
 });

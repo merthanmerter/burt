@@ -14,13 +14,20 @@ export function APITester() {
 
   const apiResponseInputRef = useRef<HTMLInputElement>(null);
   const webSocketResponseInputRef = useRef<HTMLInputElement>(null);
+  const socketRef = useRef<WebSocket | null>(null);
 
   const testEndpoint = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // api call
     const name = z.string().parse(new FormData(e.currentTarget).get("name"));
-    socket.send(name);
     const res = await trpc.hello.query({ name });
     apiResponseInputRef.current!.value = res.message;
+
+    // websocket send
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send(name);
+    }
   };
 
   useEffect(() => {
@@ -41,15 +48,22 @@ export function APITester() {
 
     fetchData();
 
+    const socket = new WebSocket("ws://localhost:3000/ws");
+    socketRef.current = socket;
+
+    socket.addEventListener("message", (event) => {
+      if (webSocketResponseInputRef.current) {
+        webSocketResponseInputRef.current.value = event.data;
+      }
+    });
+
     return () => {
-      socket.close();
+      if (socketRef.current) {
+        socketRef.current.close();
+        socketRef.current = null;
+      }
     };
   }, []);
-
-  const socket = new WebSocket("ws://localhost:3000/ws");
-  socket.addEventListener("message", (event) => {
-    webSocketResponseInputRef.current!.value = event.data;
-  });
 
   if (isLoading) {
     return (
