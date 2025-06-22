@@ -15,7 +15,8 @@ body {
 }
 
 .app {
-  width: 800px;
+  width: 450px;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -24,34 +25,34 @@ body {
 }
 .logo-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 .logo {
-  height: 4em;
-  padding: 1.5em;
+  height: 4rem;
+  padding: 1rem;
   will-change: filter;
   transition: filter 0.3s;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 1em #646cffaa);
+  filter: drop-shadow(0 0 0.5rem #646cffaa);
 }
 .bun-logo {
   transform: scale(1.2);
 }
 .bun-logo:hover {
-  filter: drop-shadow(0 0 1em #fbf0dfaa);
+  filter: drop-shadow(0 0 0.5rem #fbf0dfaa);
 }
 .react-logo {
   animation: spin 20s linear infinite;
 }
 .react-logo:hover {
-  filter: drop-shadow(0 0 1em #61dafbaa);
+  filter: drop-shadow(0 0 0.5rem #61dafbaa);
 }
 .trpc-logo:hover {
-  filter: drop-shadow(0 0 1em #61dafbaa);
+  filter: drop-shadow(0 0 0.5rem #61dafbaa);
 }
 @keyframes spin {
   from {
@@ -61,14 +62,10 @@ body {
     transform: rotate(360deg);
   }
 }
-h1 {
-  font-size: 2.2em;
-  line-height: 1.1;
-}
 code {
   background-color: #1a1a1a;
-  padding: 0.2em 0.4em;
-  border-radius: 0.3em;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.3rem;
   font-family: monospace;
 }
 .api-tester {

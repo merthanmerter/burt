@@ -48,7 +48,9 @@ export function APITester() {
 
     fetchData();
 
-    const socket = new WebSocket("ws://localhost:3000/ws");
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const host = window.location.host;
+    const socket = new WebSocket(`${protocol}//${host}/ws`);
     socketRef.current = socket;
 
     socket.addEventListener("message", (event) => {
