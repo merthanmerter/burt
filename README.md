@@ -3,25 +3,32 @@
 To install dependencies:
 
 ```bash
-bun install
+make install
 ```
 
 To start a development server:
 
 ```bash
-bun dev
+make dev
 ```
 
-To run for production:
+To build for production:
 
 ```bash
-bun start
+make build
+```
+
+To start the production server:
+
+```bash
+make start
 ```
 
 To compile to a standalone binary (including react):
 
 ```bash
-bun compile && ./index
+make compile
+make run
 ```
 
 Example application: [Burt Stack](https://burt.verkron.com)

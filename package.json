@@ -8,13 +8,12 @@
   "scripts": {
     "dev": "NODE_ENV=development bun --hot src/index.tsx",
     "start": "NODE_ENV=production bun run src/index.tsx",
-    "build": "bun build ./src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
-    "compile:macos64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-darwin-x64 --outfile=dist/macos/index",
-    "compile:macosarm64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-darwin-arm64 --outfile=dist/macos/index",
-    "compile:linux64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-linux-x64 --outfile=dist/linux/index",
-    "compile:windows64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-windows-x64 --outfile=dist/windows/index",
-    "compile:all": "bun run compile:macos64 && bun run compile:macosarm64 && bun run compile:linux64 && bun run compile:windows64",
-    "compile": "NODE_ENV=production bun build ./src/index.tsx --compile --minify"
+    "build": "bun build ./src/client/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
+    "compile:macos64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-darwin-x64 --outfile=bin/macos/index",
+    "compile:macosarm64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-darwin-arm64 --outfile=bin/macos/index",
+    "compile:linux64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-linux-x64 --outfile=bin/linux/index",
+    "compile:windows64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-windows-x64 --outfile=bin/windows/index",
+    "compile": "bun run compile:macos64 && bun run compile:macosarm64 && bun run compile:linux64 && bun run compile:windows64"
   },
   "dependencies": {
     "@trpc/client": "^11.4.2",
