@@ -1,0 +1,134 @@
+import { useTRPC } from "@/lib/trpc-client";
+import { useForm } from "@tanstack/react-form";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
+import { z } from "zod";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+
+export function APITester() {
+  const apiResponseInputRef = useRef<HTMLInputElement>(null);
+  const webSocketResponseInputRef = useRef<HTMLInputElement>(null);
+  const socketRef = useRef<WebSocket | null>(null);
+  const trpc = useTRPC();
+
+  const { data: user } = useSuspenseQuery(
+    trpc.users.find.queryOptions({ id: 1 }),
+  );
+  const { data: users } = useSuspenseQuery(trpc.users.list.queryOptions());
+
+  const helloMutation = useMutation(
+    trpc.hello.mutationOptions({
+      onSuccess: async (res) => {
+        apiResponseInputRef.current!.value = res.message;
+      },
+      onError: (err) => {
+        apiResponseInputRef.current!.value = err.message;
+      },
+    }),
+  );
+
+  const form = useForm({
+    defaultValues: {
+      name: "World!",
+    },
+    validators: {
+      onChange: z.object({
+        name: z.string().min(1, "Name is required"),
+      }),
+    },
+    onSubmit: ({ value }) => {
+      // api call
+      helloMutation.mutate({ name: value.name });
+
+      // websocket send
+      if (
+        socketRef.current &&
+        socketRef.current.readyState === WebSocket.OPEN
+      ) {
+        socketRef.current.send(value.name);
+      }
+    },
+  });
+
+  useEffect(() => {
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const host = window.location.host;
+    const socket = new WebSocket(`${protocol}//${host}/ws`);
+    socketRef.current = socket;
+
+    socket.addEventListener("message", (event) => {
+      if (webSocketResponseInputRef.current) {
+        webSocketResponseInputRef.current.value = event.data;
+      }
+    });
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.close();
+        socketRef.current = null;
+      }
+    };
+  }, []);
+
+  return (
+    <div className='min-w-md max-w-xl mx-auto space-y-4 my-auto'>
+      <form
+        className='flex gap-2'
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit();
+        }}>
+        <form.Field
+          name='name'
+          children={(field) => (
+            <div className='flex-1'>
+              <Input
+                aria-invalid={!field.state.meta.isValid}
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              {/* {!field.state.meta.isValid && (
+                <em className='text-destructive text-xs'>
+                  {field.state.meta.errors[0]?.message}
+                </em>
+              )} */}
+            </div>
+          )}
+        />
+        <form.Subscribe
+          selector={(state) => [state.canSubmit, state.isSubmitting]}
+          children={([canSubmit, isSubmitting]) => (
+            <Button
+              type='submit'
+              disabled={!canSubmit}>
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </Button>
+          )}
+        />
+      </form>
+      <Input
+        ref={apiResponseInputRef}
+        readOnly
+        placeholder='API response will appear here...'
+      />
+      <Input
+        ref={webSocketResponseInputRef}
+        readOnly
+        placeholder='WebSocket response will appear here...'
+      />
+      <Textarea
+        value={JSON.stringify(user, null, 2)}
+        readOnly
+      />
+      <Textarea
+        value={JSON.stringify(users, null, 2)}
+        readOnly
+      />
+    </div>
+  );
+}

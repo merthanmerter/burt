@@ -1,18 +1,18 @@
 import { serve } from "bun";
-import index from "./client/index.html";
+import index from "./index.html";
 import trpcServer from "./server/trpc";
 import websocket from "./server/ws";
 
 const server = serve({
-  port: 3000,
+  port: 3001,
   routes: {
-    "/": index,
+    "/*": index,
     "/trpc/*": trpcServer.fetch,
     "/ws": (req) => {
       server.upgrade(req);
       return undefined;
     },
-    "/*": () => new Response("Not found", { status: 404 }),
+    // "/*": () => new Response("Not found", { status: 404 }),
   },
   websocket,
   development: process.env.NODE_ENV !== "production" && {
