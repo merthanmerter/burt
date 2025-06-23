@@ -1,8 +1,8 @@
 import { useTRPC } from "@/lib/trpc-client";
+import { useForm } from "@tanstack/react-form";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { useEffect, useRef, type FormEvent } from "react";
-import { toast } from "sonner";
-import { z, ZodError } from "zod";
+import { useEffect, useRef } from "react";
+import { z } from "zod";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -29,6 +29,29 @@ export function APITester() {
     }),
   );
 
+  const form = useForm({
+    defaultValues: {
+      name: "World!",
+    },
+    validators: {
+      onChange: z.object({
+        name: z.string().min(1, "Name is required"),
+      }),
+    },
+    onSubmit: ({ value }) => {
+      // api call
+      helloMutation.mutate({ name: value.name });
+
+      // websocket send
+      if (
+        socketRef.current &&
+        socketRef.current.readyState === WebSocket.OPEN
+      ) {
+        socketRef.current.send(value.name);
+      }
+    },
+  });
+
   useEffect(() => {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const host = window.location.host;
@@ -49,48 +72,44 @@ export function APITester() {
     };
   }, []);
 
-  const testEndpoint = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      // api call
-      const name = await z
-        .string()
-        .min(1)
-        .parseAsync(new FormData(e.currentTarget).get("name"));
-
-      helloMutation.mutate({ name });
-
-      // websocket send
-      if (
-        socketRef.current &&
-        socketRef.current.readyState === WebSocket.OPEN
-      ) {
-        socketRef.current.send(name);
-      }
-    } catch (error) {
-      toast.error(
-        error instanceof ZodError
-          ? error.errors.map((e) => e.message).join(", ")
-          : error instanceof Error
-          ? error.message
-          : "Unknown error",
-      );
-    }
-  };
-
   return (
     <div className='min-w-md max-w-xl mx-auto space-y-4 my-auto'>
       <form
-        onSubmit={testEndpoint}
-        className='flex gap-2'>
-        <Input
-          type='text'
+        className='flex gap-2'
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit();
+        }}>
+        <form.Field
           name='name'
-          defaultValue='World!'
-          placeholder='World!'
+          children={(field) => (
+            <div className='flex-1'>
+              <Input
+                aria-invalid={!field.state.meta.isValid}
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              {/* {!field.state.meta.isValid && (
+                <em className='text-destructive text-xs'>
+                  {field.state.meta.errors[0]?.message}
+                </em>
+              )} */}
+            </div>
+          )}
         />
-        <Button type='submit'>Send</Button>
+        <form.Subscribe
+          selector={(state) => [state.canSubmit, state.isSubmitting]}
+          children={([canSubmit, isSubmitting]) => (
+            <Button
+              type='submit'
+              disabled={!canSubmit}>
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </Button>
+          )}
+        />
       </form>
       <Input
         ref={apiResponseInputRef}
@@ -102,8 +121,14 @@ export function APITester() {
         readOnly
         placeholder='WebSocket response will appear here...'
       />
-      <Textarea>{JSON.stringify(user, null, 2)}</Textarea>
-      <Textarea>{JSON.stringify(users, null, 2)}</Textarea>
+      <Textarea
+        value={JSON.stringify(user, null, 2)}
+        readOnly
+      />
+      <Textarea
+        value={JSON.stringify(users, null, 2)}
+        readOnly
+      />
     </div>
   );
 }
