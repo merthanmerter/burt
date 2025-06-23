@@ -10,14 +10,14 @@ db.exec(`
 `);
 
 function seedIfEmpty() {
-  const { count } = db.query(`SELECT COUNT(*) as count FROM users`).get() as {
-    count: number;
-  };
+	const { count } = db.query(`SELECT COUNT(*) as count FROM users`).get() as {
+		count: number;
+	};
 
-  if (count === 0) {
-    const insert = db.query("INSERT INTO users (name) VALUES (?)");
-    ["John Doe", "Jane Doe"].forEach((name) => insert.run(name));
-  }
+	if (count === 0) {
+		const insert = db.query("INSERT INTO users (name) VALUES (?)");
+		["John Doe", "Jane Doe"].forEach((name) => insert.run(name));
+	}
 }
 
 seedIfEmpty();

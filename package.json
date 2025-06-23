@@ -9,7 +9,7 @@
     "dev": "concurrently -k -n TAILWIND,BUN,TSR -c green,cyan,yellow \"bun run tailwind:watch\" \"NODE_ENV=development bun --hot src/index.tsx\" \"bun run watch-routes\"",
     "start": "NODE_ENV=production bun run src/index.tsx",
     "build": "rm -rf dist && bun build ./src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\\\"production\\\"' --env='BUN_PUBLIC_*'",
-    "prebuild": "bun run tailwind && bun run generate-routes",
+    "prebuild": "bun run tailwind && bun run generate-routes && bun run lint && bun run format",
     "generate-routes": "tsr generate",
     "watch-routes": "tsr watch",
     "tailwind": "tailwindcss -i ./src/styles/index.css -o ./src/styles/output.css --minify",
@@ -18,7 +18,9 @@
     "compile:macosarm64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-darwin-arm64 --outfile=bin/macos/index",
     "compile:linux64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-linux-x64 --outfile=bin/linux/index",
     "compile:windows64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-windows-x64 --outfile=bin/windows/index",
-    "compile": "bun run prebuild && bun run compile:macos64 && bun run compile:macosarm64 && bun run compile:linux64 && bun run compile:windows64"
+    "compile": "bun run prebuild && bun run compile:macos64 && bun run compile:macosarm64 && bun run compile:linux64 && bun run compile:windows64",
+    "lint": "biome check . --write",
+    "format": "biome format --write ."
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
@@ -42,6 +44,7 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.0.4",
     "@tanstack/react-router-devtools": "^1.121.34",
     "@tanstack/router-cli": "^1.121.34",
     "@types/bun": "latest",

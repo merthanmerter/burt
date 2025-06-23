@@ -5,12 +5,12 @@
  * It is included in `src/index.html`.
  */
 
-import { queryClient } from "@/lib/query-client";
-import { TRPCProvider, trpc, trpcClient } from "@/lib/trpc-client";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { queryClient } from "@/lib/query-client";
+import { TRPCProvider, trpc, trpcClient } from "@/lib/trpc-client";
 import { ThemeProvider } from "./components/theme-provider";
 import { Toaster } from "./components/ui/sonner";
 
@@ -29,46 +29,46 @@ https://tanstack.com/router/latest/docs/framework/react/routing/installation-wit
 import { routeTree } from "./routeTree.gen";
 
 declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
+	interface Register {
+		router: typeof router;
+	}
 }
 
 const router = createRouter({
-  routeTree,
-  context: {
-    queryClient,
-    trpc,
-  },
-  defaultPreload: "intent",
-  Wrap: ({ children }) => (
-    <QueryClientProvider client={queryClient}>
-      <TRPCProvider
-        trpcClient={trpcClient}
-        queryClient={queryClient}>
-        <ThemeProvider>
-          {children}
-          <Toaster />
-        </ThemeProvider>
-      </TRPCProvider>
-    </QueryClientProvider>
-  ),
-  notFoundMode: "root",
-  defaultNotFoundComponent: () => <div>Not Found</div>,
-  defaultErrorComponent: () => <div>Error</div>,
+	routeTree,
+	context: {
+		queryClient,
+		trpc,
+	},
+	defaultPreload: "intent",
+	Wrap: ({ children }) => (
+		<QueryClientProvider client={queryClient}>
+			<TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+				<ThemeProvider>
+					{children}
+					<Toaster />
+				</ThemeProvider>
+			</TRPCProvider>
+		</QueryClientProvider>
+	),
+	notFoundMode: "root",
+	defaultNotFoundComponent: () => <div>Not Found</div>,
+	defaultErrorComponent: () => <div>Error</div>,
 });
 
+// biome-ignore lint/style/noNonNullAssertion: <>
 const elem = document.getElementById("root")!;
 const app = (
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
+	<StrictMode>
+		<RouterProvider router={router} />
+	</StrictMode>
 );
 if (import.meta.hot) {
-  // With hot module reloading, `import.meta.hot.data` is persisted.
-  const root = (import.meta.hot.data.root ??= createRoot(elem));
-  root.render(app);
+	// With hot module reloading, `import.meta.hot.data` is persisted.
+	// biome-ignore lint/suspicious/noAssignInExpressions: <>
+	const root = (import.meta.hot.data.root ??= createRoot(elem));
+	root.render(app);
 } else {
-  // The hot module reloading API is not available in production.
-  createRoot(elem).render(app);
+	// The hot module reloading API is not available in production.
+	createRoot(elem).render(app);
 }
