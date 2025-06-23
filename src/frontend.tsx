@@ -47,6 +47,9 @@ const router = createRouter({
       </TRPCProvider>
     </QueryClientProvider>
   ),
+  notFoundMode: "root",
+  defaultNotFoundComponent: () => <div>Not Found</div>,
+  defaultErrorComponent: () => <div>Error</div>,
 });
 
 declare module "@tanstack/react-router" {
