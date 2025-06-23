@@ -14,7 +14,7 @@ into a single binary**, making it ideal for self-contained deployments.
 No need for Node.js, complex runtime environments, or even internet access —
 just run the binary.
 
-Check out a real-world usage: [Burt Stack](https://burt2.verkron.com)
+Check out a real-world usage: [Burt Stack](https://burt.verkron.com)
 
 ### Features
 
