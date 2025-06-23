@@ -32,7 +32,7 @@ export default function LogoArea() {
       <img
         src={shadcnLogo}
         alt='Shadcn Logo'
-        className='size-12 hover:scale-110 transition-transform duration-200'
+        className='size-12 hover:scale-110 transition-transform duration-200 dark:invert'
       />
       <img
         src={tailwindLogo}

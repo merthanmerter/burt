@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { z, ZodError } from "zod";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 export function APITester() {
   const apiResponseInputRef = useRef<HTMLInputElement>(null);
@@ -101,12 +102,8 @@ export function APITester() {
         readOnly
         placeholder='WebSocket response will appear here...'
       />
-      <div className='border border-gray-200 p-2 rounded-md whitespace-pre-wrap text-xs'>
-        <code>{JSON.stringify(user, null, 2)}</code>
-      </div>
-      <div className='border border-gray-200 p-2 rounded-md whitespace-pre-wrap text-xs'>
-        <code>{JSON.stringify(users, null, 2)}</code>
-      </div>
+      <Textarea>{JSON.stringify(user, null, 2)}</Textarea>
+      <Textarea>{JSON.stringify(users, null, 2)}</Textarea>
     </div>
   );
 }

@@ -1,3 +1,6 @@
+import githubLogo from "@/components/logo/github.svg";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
 import { TRPCProxyClient } from "@/lib/trpc-client";
 import { QueryClient } from "@tanstack/react-query";
 import {
@@ -44,7 +47,7 @@ export const rootRoute = createRootRouteWithContext<RootContext>()({
   component: () => (
     <>
       <HeadContent />
-      <div className='mb-auto p-3 bg-muted w-full border-b space-x-3'>
+      <div className='mb-auto p-2.5 bg-muted/20 w-full border-b space-x-3 flex items-center'>
         <Link
           to='/'
           className='[&.active]:font-bold'>
@@ -55,6 +58,24 @@ export const rootRoute = createRootRouteWithContext<RootContext>()({
           className='[&.active]:font-bold'>
           About
         </Link>
+        <div className='ml-auto flex items-center gap-2'>
+          <Button
+            variant='outline'
+            size='icon'
+            asChild>
+            <a
+              href='https://github.com/merthanmerter/bun-react-trpc/tree/v2'
+              target='_blank'
+              className=''>
+              <img
+                src={githubLogo}
+                alt='GitHub Logo'
+                className='size-5 hover:scale-110 transition-transform duration-200 dark:invert'
+              />
+            </a>
+          </Button>
+          <ModeToggle />
+        </div>
       </div>
       <div className='app'>
         <Outlet />
