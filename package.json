@@ -6,10 +6,12 @@
   "main": "src/index.tsx",
   "module": "src/index.tsx",
   "scripts": {
-    "dev": "concurrently -k -n TAILWIND,BUN -c green,cyan \"bun run tailwind:watch\" \"NODE_ENV=development bun --hot src/index.tsx\"",
+    "dev": "concurrently -k -n TAILWIND,BUN,TSR -c green,cyan,yellow \"bun run tailwind:watch\" \"NODE_ENV=development bun --hot src/index.tsx\" \"bun run watch-routes\"",
     "start": "NODE_ENV=production bun run src/index.tsx",
     "build": "rm -rf dist && bun build ./src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\\\"production\\\"' --env='BUN_PUBLIC_*'",
-    "prebuild": "bun run tailwind",
+    "prebuild": "bun run tailwind && bun run generate-routes",
+    "generate-routes": "tsr generate",
+    "watch-routes": "tsr watch",
     "tailwind": "tailwindcss -i ./src/styles/index.css -o ./src/styles/output.css --minify",
     "tailwind:watch": "tailwindcss -i ./src/styles/index.css -o ./src/styles/output.css --watch --minify",
     "compile:macos64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-darwin-x64 --outfile=bin/macos/index",
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "@tanstack/react-router-devtools": "^1.121.34",
+    "@tanstack/router-cli": "^1.121.34",
     "@types/bun": "latest",
     "@types/react": "^19",
     "@types/react-dom": "^19"

@@ -15,11 +15,13 @@ export type RootContext = {
   queryClient: QueryClient;
   trpc: TRPCProxyClient;
 };
-export const rootRoute = createRootRouteWithContext<RootContext>()({
+
+export const Route = createRootRouteWithContext<RootContext>()({
   head: () => ({
     meta: [
       {
         title: "Burt",
+        description: "Burt is a modern React application built with Bun",
       },
       // {
       //   name: "viewport",
