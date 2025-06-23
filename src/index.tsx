@@ -4,7 +4,7 @@ import trpcServer from "./server/trpc";
 import websocket from "./server/ws";
 
 const server = serve({
-  port: 3000,
+  port: 3001,
   routes: {
     "/*": index,
     "/trpc/*": trpcServer.fetch,
