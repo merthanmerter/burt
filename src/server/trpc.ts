@@ -19,9 +19,9 @@ export const t = initTRPC
 
 const middleware = t.middleware(async ({ path, next }) => {
   // simulate loading delay
-  if (path !== "hello") {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-  }
+  // if (path !== "hello") {
+  //   await new Promise((resolve) => setTimeout(resolve, 1500));
+  // }
   return await next();
 });
 
@@ -34,7 +34,7 @@ export const appRouter = t.router({
         name: z.string(),
       }),
     )
-    .query(({ input }) => {
+    .mutation(({ input }) => {
       return z
         .object({
           message: z.string(),
