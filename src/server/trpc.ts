@@ -18,7 +18,8 @@ export const t = initTRPC
 	});
 
 const middleware = t.middleware(async ({ next }) => {
-	// do something
+	// simulate slow response
+	// await new Promise((resolve) => setTimeout(resolve, 1000));
 	return await next();
 });
 
