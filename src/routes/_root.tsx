@@ -64,7 +64,7 @@ export const rootRoute = createRootRouteWithContext<RootContext>()({
             size='icon'
             asChild>
             <a
-              href='https://github.com/merthanmerter/bun-react-trpc/tree/v2'
+              href='https://github.com/merthanmerter/bun-react-trpc'
               target='_blank'
               className=''>
               <img
