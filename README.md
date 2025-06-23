@@ -60,3 +60,29 @@ To compile to a standalone binary:
 make compile
 make run
 ```
+
+Example deployment:
+
+```bash
+# copy the binary to the server
+scp bin/linux/index user@your-server:/usr/local/bin/burt
+
+# /etc/systemd/system/burt.service
+[Unit]
+Description=Burt Stack Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/burt
+Restart=always
+User=youruser
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+
+# reload systemd to apply the new service
+sudo systemctl daemon-reload
+sudo systemctl enable --now burt
+sudo systemctl status burt
+```
