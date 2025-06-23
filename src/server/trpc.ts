@@ -39,6 +39,13 @@ export const appRouter = t.router({
 				})
 				.parse({ message: `Hello, ${input.name}` });
 		}),
+	readme: publicProcedure.query(async () => {
+		try {
+			return await Bun.file("README.md").text();
+		} catch {
+			throw new Error("Failed to read README.md");
+		}
+	}),
 	users: {
 		find: publicProcedure
 			.input(z.object({ id: z.number() }))

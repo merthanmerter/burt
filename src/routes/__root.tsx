@@ -53,8 +53,8 @@ export const Route = createRootRouteWithContext<RootContext>()({
 				<Link to="/" className="[&.active]:font-bold">
 					Home
 				</Link>{" "}
-				<Link to="/about" className="[&.active]:font-bold">
-					About
+				<Link to="/readme" className="[&.active]:font-bold">
+					Readme
 				</Link>
 				<div className="ml-auto flex items-center gap-2">
 					<Button variant="outline" size="icon" asChild>

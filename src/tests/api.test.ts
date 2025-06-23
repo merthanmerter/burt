@@ -37,6 +37,12 @@ test("should return list of users", async () => {
 	]);
 });
 
+test("should return readme", async () => {
+	const response = await trpcRequest().readme();
+	expect(response).toBeTypeOf("string");
+	expect(response.length).toBeGreaterThan(1500);
+});
+
 test("should return user by id", async () => {
 	const response = await trpcRequest().users.find({ id: 1 });
 	expect(response).toEqual({ id: 1, name: "John Doe" });
