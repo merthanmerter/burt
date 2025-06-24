@@ -72,7 +72,7 @@ export function APITester() {
 	}, []);
 
 	return (
-		<div className="min-w-md max-w-xl mx-auto space-y-4 my-auto">
+		<div className="space-y-4">
 			<form
 				className="flex gap-2"
 				onSubmit={(e) => {

@@ -38,7 +38,7 @@ function Page() {
 				<Button
 					variant="outline"
 					size="icon"
-					className="absolute top-2 right-2"
+					className="absolute top-2 right-2 z-10 dark:bg-border dark:hover:bg-border"
 					onClick={() => {
 						navigator.clipboard.writeText(TERMINAL_CODE);
 						toast.success("Copied to clipboard", {
@@ -48,7 +48,7 @@ function Page() {
 				>
 					<CopyIcon className="size-4" />
 				</Button>
-				<pre>{TERMINAL_CODE}</pre>
+				<pre className="overflow-x-auto">{TERMINAL_CODE}</pre>
 			</div>
 		</div>
 	);

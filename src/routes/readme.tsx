@@ -20,14 +20,16 @@ export const Route = createFileRoute("/readme")({
 
 function Page() {
 	return (
-		<div className="p-4 max-w-4xl mx-auto">
+		<>
 			<Suspense
 				fallback={
-					<LoaderIcon className="size-8 animate-spin text-muted-foreground" />
+					<div className="flex items-center justify-center min-h-96">
+						<LoaderIcon className="size-8 animate-spin text-muted-foreground" />
+					</div>
 				}
 			>
 				<ReadmeMarkdown />
 			</Suspense>
-		</div>
+		</>
 	);
 }
