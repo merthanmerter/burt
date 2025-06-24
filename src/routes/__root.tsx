@@ -1,4 +1,5 @@
 import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools as TanStackQueryDevtools } from "@tanstack/react-query-devtools";
 import {
 	createRootRouteWithContext,
 	HeadContent,
@@ -66,6 +67,7 @@ function Root() {
 				<Outlet />
 			</main>
 			<Scripts />
+			<TanStackQueryDevtools />
 			<TanStackRouterDevtools />
 		</>
 	);
