@@ -35,7 +35,7 @@
     "@trpc/tanstack-react-query": "^11.4.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.522.0",
+    "lucide-react": "^0.523.0",
     "marked": "^15.0.12",
     "react": "^19",
     "react-dom": "^19",
@@ -47,7 +47,7 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.4",
+    "@biomejs/biome": "2.0.5",
     "@tanstack/react-router-devtools": "^1.121.34",
     "@tanstack/router-cli": "^1.121.34",
     "@types/bun": "latest",
