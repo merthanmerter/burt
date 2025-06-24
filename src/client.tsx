@@ -8,7 +8,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import { queryClient } from "@/lib/query-client";
 import { TRPCProvider, trpc, trpcClient } from "@/lib/trpc-client";
 import { ThemeProvider } from "./components/theme-provider";
@@ -56,19 +56,55 @@ const router = createRouter({
 	defaultErrorComponent: () => <div>Error</div>,
 });
 
-// biome-ignore lint/style/noNonNullAssertion: <>
-const elem = document.getElementById("root")!;
-const app = (
-	<StrictMode>
-		<RouterProvider router={router} />
-	</StrictMode>
-);
-if (import.meta.hot) {
-	// With hot module reloading, `import.meta.hot.data` is persisted.
-	// biome-ignore lint/suspicious/noAssignInExpressions: <>
-	const root = (import.meta.hot.data.root ??= createRoot(elem));
-	root.render(app);
-} else {
-	// The hot module reloading API is not available in production.
-	createRoot(elem).render(app);
+function App() {
+	return (
+		<StrictMode>
+			<RouterProvider router={router} />
+		</StrictMode>
+	);
 }
+
+// biome-ignore lint/style/noNonNullAssertion: Root element is guaranteed to exist
+const elem = document.getElementById("root")!;
+
+/* 
+https://bun.sh/docs/bundler/hmr
+Handle both development (HMR) and production cases.
+In development, import.meta.hot exists and we use data persistence.
+In production, import.meta.hot is undefined, so we create a new root directly.
+*/
+let root: Root;
+
+if (import.meta.hot) {
+	/*
+	Use direct assignment to import.meta.hot.data with ??= operator
+	import.meta.hot.data persists state between hot reloads and survives module replacement.
+	*/
+	root = import.meta.hot.data.root ??= createRoot(elem);
+
+	/*
+	Set up cleanup with dispose() callback because dispose() is called
+	just before the module is replaced with a new version.
+	The dispose() callback runs before the new module loads, ensuring clean transitions.
+	*/
+	import.meta.hot.dispose(() => {
+		root.unmount();
+	});
+
+	/*
+	Call accept() without arguments to enable hot reloading because
+	accept() without args creates a hot-reloading boundary for this module.
+	When this file or any of its dependencies change, only this module re-evaluates.
+	Files that import this module get automatically patched with the new version.
+	Without accept(), changes would cause a full page reload instead of hot reload.
+	*/
+	import.meta.hot.accept();
+} else {
+	/*
+	In production, simply create a new root since there's no hot reloading.
+	This is the standard React 18 pattern for production builds.
+	*/
+	root = createRoot(elem);
+}
+
+root.render(<App />);

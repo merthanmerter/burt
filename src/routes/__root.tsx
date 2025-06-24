@@ -4,6 +4,7 @@ import {
 	HeadContent,
 	Link,
 	Outlet,
+	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import githubLogo from "@/components/logo/github.svg";
@@ -23,30 +24,17 @@ export const Route = createRootRouteWithContext<RootContext>()({
 				title: "Burt",
 				description: "Burt is a modern React application built with Bun",
 			},
-			// {
-			//   name: "viewport",
-			//   content: "width=device-width, initial-scale=1.0",
-			// },
-			// {
-			//   name: "description",
-			//   content:
-			//     "A modern React application built with Bun, TanStack Router, and tRPC",
-			// },
-			// {
-			//   name: "theme-color",
-			//   content: "#000000",
-			// },
-			// {
-			//   rel: "icon",
-			//   href: "/favicon.ico",
-			// },
-			// {
-			//   rel: "stylesheet",
-			//   href: "/output.css",
-			// },
+			{
+				name: "viewport",
+				content: "width=device-width, initial-scale=1.0",
+			},
 		],
 	}),
-	component: () => (
+	component: Root,
+});
+
+function Root() {
+	return (
 		<>
 			<HeadContent />
 			<div className="mb-auto p-2.5 bg-muted/20 w-full border-b space-x-3 flex items-center">
@@ -74,10 +62,9 @@ export const Route = createRootRouteWithContext<RootContext>()({
 					<ModeToggle />
 				</div>
 			</div>
-			<div className="app">
-				<Outlet />
-				<TanStackRouterDevtools />
-			</div>
+			<Outlet />
+			<Scripts />
+			<TanStackRouterDevtools />
 		</>
-	),
-});
+	);
+}

@@ -3,6 +3,7 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { z } from "zod";
 import { useTRPC } from "@/lib/trpc-client";
+import { ws } from "@/lib/ws-client";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -21,11 +22,11 @@ export function APITester() {
 	const helloMutation = useMutation(
 		trpc.hello.mutationOptions({
 			onSuccess: async (res) => {
-				// biome-ignore lint/style/noNonNullAssertion: <>
+				// biome-ignore lint/style/noNonNullAssertion: !
 				apiResponseInputRef.current!.value = res.message;
 			},
 			onError: (err) => {
-				// biome-ignore lint/style/noNonNullAssertion: <>
+				// biome-ignore lint/style/noNonNullAssertion: !
 				apiResponseInputRef.current!.value = err.message;
 			},
 		}),
@@ -55,22 +56,18 @@ export function APITester() {
 	});
 
 	useEffect(() => {
-		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-		const host = window.location.host;
-		const socket = new WebSocket(`${protocol}//${host}/ws`);
-		socketRef.current = socket;
+		socketRef.current = ws;
 
-		socket.addEventListener("message", (event) => {
+		const messageHandler = (event: MessageEvent) => {
 			if (webSocketResponseInputRef.current) {
 				webSocketResponseInputRef.current.value = event.data;
 			}
-		});
+		};
+
+		socketRef.current?.addEventListener("message", messageHandler);
 
 		return () => {
-			if (socketRef.current) {
-				socketRef.current.close();
-				socketRef.current = null;
-			}
+			socketRef.current?.removeEventListener("message", messageHandler);
 		};
 	}, []);
 
@@ -83,10 +80,8 @@ export function APITester() {
 					form.handleSubmit();
 				}}
 			>
-				<form.Field
-					name="name"
-					// biome-ignore lint/correctness/noChildrenProp: <>
-					children={(field) => (
+				<form.Field name="name">
+					{(field) => (
 						<div className="flex-1">
 							<Input
 								aria-invalid={!field.state.meta.isValid}
@@ -97,22 +92,22 @@ export function APITester() {
 								onChange={(e) => field.handleChange(e.target.value)}
 							/>
 							{/* {!field.state.meta.isValid && (
-                <em className='text-destructive text-xs'>
-                  {field.state.meta.errors[0]?.message}
-                </em>
-              )} */}
+							<em className="text-destructive text-xs">
+								{field.state.meta.errors[0]?.message}
+							</em>
+						)} */}
 						</div>
 					)}
-				/>
+				</form.Field>
 				<form.Subscribe
 					selector={(state) => [state.canSubmit, state.isSubmitting]}
-					// biome-ignore lint/correctness/noChildrenProp: <>
-					children={([canSubmit, isSubmitting]) => (
+				>
+					{([canSubmit, isSubmitting]) => (
 						<Button type="submit" disabled={!canSubmit}>
 							{isSubmitting ? "Submitting..." : "Submit"}
 						</Button>
 					)}
-				/>
+				</form.Subscribe>
 			</form>
 			<Input
 				ref={apiResponseInputRef}

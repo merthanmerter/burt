@@ -4,10 +4,6 @@ import { Suspense } from "react";
 import ReadmeMarkdown from "@/components/readme-markdown";
 
 export const Route = createFileRoute("/readme")({
-	beforeLoad: async ({ context }) => {
-		context.queryClient.prefetchQuery(context.trpc.readme.queryOptions());
-	},
-	component: Readme,
 	head: () => ({
 		meta: [
 			{
@@ -16,9 +12,13 @@ export const Route = createFileRoute("/readme")({
 			},
 		],
 	}),
+	beforeLoad: ({ context }) => {
+		context.queryClient.prefetchQuery(context.trpc.readme.queryOptions());
+	},
+	component: Page,
 });
 
-function Readme() {
+function Page() {
 	return (
 		<div className="p-4 max-w-4xl mx-auto">
 			<Suspense

@@ -11,7 +11,11 @@ export const Route = createFileRoute("/")({
 			context.trpc.users.find.queryOptions({ id: 1 }),
 		);
 	},
-	component: () => (
+	component: Page,
+});
+
+function Page() {
+	return (
 		<div>
 			<LogoArea />
 			<Suspense
@@ -28,5 +32,5 @@ export const Route = createFileRoute("/")({
 				<APITester />
 			</Suspense>
 		</div>
-	),
-});
+	);
+}
