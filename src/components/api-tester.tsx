@@ -119,8 +119,8 @@ export function APITester() {
 				readOnly
 				placeholder="WebSocket response will appear here..."
 			/>
-			<Textarea value={JSON.stringify(user, null, 2)} readOnly />
-			<Textarea value={JSON.stringify(users, null, 2)} readOnly />
+			<Textarea value={JSON.stringify(user, null, 2)} readOnly rows={4} />
+			<Textarea value={JSON.stringify(users, null, 2)} readOnly rows={10} />
 		</div>
 	);
 }
