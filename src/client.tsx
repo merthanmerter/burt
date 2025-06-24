@@ -64,9 +64,6 @@ function App() {
 	);
 }
 
-// biome-ignore lint/style/noNonNullAssertion: Root element is guaranteed to exist
-const elem = document.getElementById("root")!;
-
 /* 
 https://bun.sh/docs/bundler/hmr
 Handle both development (HMR) and production cases.
@@ -80,7 +77,7 @@ if (import.meta.hot) {
 	Use direct assignment to import.meta.hot.data with ??= operator
 	import.meta.hot.data persists state between hot reloads and survives module replacement.
 	*/
-	root = import.meta.hot.data.root ??= createRoot(elem);
+	root = import.meta.hot.data.root ??= createRoot(document.body);
 
 	/*
 	Set up cleanup with dispose() callback because dispose() is called
@@ -104,7 +101,7 @@ if (import.meta.hot) {
 	In production, simply create a new root since there's no hot reloading.
 	This is the standard React 18 pattern for production builds.
 	*/
-	root = createRoot(elem);
+	root = createRoot(document.body);
 }
 
 root.render(<App />);

@@ -12,7 +12,6 @@ const server = serve({
 			server.upgrade(req);
 			return undefined;
 		},
-		// "/*": () => new Response("Not found", { status: 404 }),
 	},
 	websocket,
 	development: process.env.NODE_ENV !== "production" && {

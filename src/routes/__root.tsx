@@ -37,7 +37,7 @@ function Root() {
 	return (
 		<>
 			<HeadContent />
-			<div className="mb-auto p-2.5 bg-muted/20 w-full border-b space-x-3 flex items-center">
+			<nav className="mb-auto p-2.5 bg-muted/20 w-full border-b space-x-3 flex items-center">
 				<Link to="/" className="[&.active]:font-bold">
 					Home
 				</Link>{" "}
@@ -61,8 +61,10 @@ function Root() {
 					</Button>
 					<ModeToggle />
 				</div>
-			</div>
-			<Outlet />
+			</nav>
+			<main className="@container/main max-w-5xl px-4 mx-auto">
+				<Outlet />
+			</main>
 			<Scripts />
 			<TanStackRouterDevtools />
 		</>

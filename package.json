@@ -51,6 +51,7 @@
     "@tanstack/router-cli": "^1.121.34",
     "@types/bun": "latest",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "concurrently": "^9.2.0"
   }
 }
