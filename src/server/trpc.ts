@@ -40,11 +40,17 @@ export const appRouter = t.router({
 				.parse({ message: `Hello, ${input.name}` });
 		}),
 	readme: publicProcedure.query(async () => {
-		try {
-			return await Bun.file("README.md").text();
-		} catch {
-			throw new Error("Failed to read README.md");
-		}
+		const response = await fetch(
+			"https://raw.githubusercontent.com/merthanmerter/burt/main/README.md",
+		)
+			.then((res) => (res.ok ? res.text() : null))
+			.catch(() => null);
+
+		if (response) return response;
+
+		return await Bun.file("README.md")
+			.text()
+			.catch(() => "README.md not available");
 	}),
 	users: {
 		find: publicProcedure

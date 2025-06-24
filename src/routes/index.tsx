@@ -3,6 +3,7 @@ import { CopyIcon } from "lucide-react";
 import { Suspense } from "react";
 import { toast } from "sonner";
 import { APITester } from "@/components/api-tester";
+import { GitHubStars } from "@/components/github-stars";
 import LogoArea from "@/components/logo-area";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -49,6 +50,9 @@ function Page() {
 					<CopyIcon className="size-4" />
 				</Button>
 				<pre className="overflow-x-auto">{TERMINAL_CODE}</pre>
+			</div>
+			<div className="flex justify-end mt-4">
+				<GitHubStars />
 			</div>
 		</div>
 	);
