@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "concurrently -k -n TAILWIND,BUN,TSR -c green,cyan,yellow \"bun run tailwind:watch\" \"NODE_ENV=development bun --hot src/index.tsx\" \"bun run watch-routes\"",
     "start": "NODE_ENV=production bun run src/index.tsx",
-    "build": "rm -rf dist && bun build ./src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\\\"production\\\"' --env='BUN_PUBLIC_*'",
+    "build": "rm -rf public && bun build ./src/index.html --outdir=public --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\\\"production\\\"' --env='BUN_PUBLIC_*'",
     "prebuild": "bun run tailwind && bun run generate-routes && bun run lint && bun run format && bun run test",
     "generate-routes": "tsr generate",
     "watch-routes": "tsr watch",

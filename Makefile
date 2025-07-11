@@ -30,7 +30,7 @@ start:
 
 # Clean build artifacts
 clean:
-	rm -rf dist/
+	rm -rf public/
 	rm -rf bin/
 	rm -f db.sqlite
 
