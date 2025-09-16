@@ -3,7 +3,7 @@
   "outputDirectory": "public",
   "functions": {
     "src/server/trpc.ts": {
-      "runtime": "nodejs20.x"
+      "runtime": "@vercel/node"
     }
   },
   "routes": [
