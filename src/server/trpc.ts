@@ -5,7 +5,7 @@ import {
 } from "@trpc/server/adapters/fetch";
 import superjson from "superjson";
 import { z } from "zod";
-import db from "./db";
+import { db } from "./db";
 
 export function createContext({ req }: FetchCreateContextFnOptions) {
 	return { req, db };
@@ -61,9 +61,7 @@ export const appRouter = t.router({
 						id: z.number(),
 						name: z.string(),
 					})
-					.parse(
-						ctx.db.query("SELECT * FROM users WHERE id = ?").get(input.id),
-					);
+					.parse(ctx.db.query().get(input.id));
 			}),
 		list: publicProcedure.query(({ ctx }) => {
 			return z
@@ -73,7 +71,7 @@ export const appRouter = t.router({
 						name: z.string(),
 					}),
 				)
-				.parse(ctx.db.query("SELECT * FROM users").all());
+				.parse(ctx.db.query().all());
 		}),
 	},
 });

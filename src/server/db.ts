@@ -1,25 +1,14 @@
-import sql from "bun:sqlite";
+// import sql from "bun:sqlite";
+// const db = sql.open("./db.sqlite");
 
-const db = sql.open("./db.sqlite");
+export const users = [
+	{ id: 1, name: "John Doe" },
+	{ id: 2, name: "Jane Doe" },
+];
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
-  )
-`);
-
-function seedIfEmpty() {
-	const { count } = db.query(`SELECT COUNT(*) as count FROM users`).get() as {
-		count: number;
-	};
-
-	if (count === 0) {
-		const insert = db.query("INSERT INTO users (name) VALUES (?)");
-		["John Doe", "Jane Doe"].forEach((name) => insert.run(name));
-	}
-}
-
-seedIfEmpty();
-
-export default db;
+export const db = {
+	query: () => ({
+		all: () => users,
+		get: (id: number) => users.find((user) => user.id === id),
+	}),
+};

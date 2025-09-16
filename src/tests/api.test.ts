@@ -1,25 +1,16 @@
-import Database from "bun:sqlite";
 import { expect, test } from "bun:test";
+import { db, users } from "@/server/db";
 import { appRouter } from "@/server/trpc";
 
-function createTestContext(db: Database) {
+function createTestContext() {
 	return {
 		req: new Request("http://localhost:3000/trpc"),
 		db,
 	};
 }
 
-function createTestDb() {
-	const db = new Database(":memory:");
-	db.exec(
-		"CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)",
-	);
-	db.exec("INSERT INTO users (name) VALUES (?)", ["John Doe"]);
-	return db;
-}
-
 export const trpcRequest = () => {
-	return appRouter.createCaller(createTestContext(createTestDb()));
+	return appRouter.createCaller(createTestContext());
 };
 
 test("should return hello message", async () => {
@@ -29,12 +20,7 @@ test("should return hello message", async () => {
 
 test("should return list of users", async () => {
 	const response = await trpcRequest().users.list();
-	expect(response).toEqual([
-		{
-			id: 1,
-			name: "John Doe",
-		},
-	]);
+	expect(response).toEqual([...users]);
 });
 
 test("should return readme", async () => {
@@ -45,7 +31,7 @@ test("should return readme", async () => {
 
 test("should return user by id", async () => {
 	const response = await trpcRequest().users.find({ id: 1 });
-	expect(response).toEqual({ id: 1, name: "John Doe" });
+	expect(response).toEqual(users[0]);
 });
 
 test("should throw error when user not found", async () => {
