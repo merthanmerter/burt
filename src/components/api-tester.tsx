@@ -1,16 +1,17 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { z } from "zod";
 import { useTRPC } from "@/lib/trpc-client";
+import { ws } from "@/lib/ws-client";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
 export function APITester() {
 	const apiResponseInputRef = useRef<HTMLInputElement>(null);
-	// const webSocketResponseInputRef = useRef<HTMLInputElement>(null);
-	// const socketRef = useRef<WebSocket | null>(null);
+	const webSocketResponseInputRef = useRef<HTMLInputElement>(null);
+	const socketRef = useRef<WebSocket | null>(null);
 	const trpc = useTRPC();
 
 	const { data: user } = useSuspenseQuery(
@@ -45,30 +46,30 @@ export function APITester() {
 			helloMutation.mutate({ name: value.name });
 
 			// websocket send
-			// if (
-			// 	socketRef.current &&
-			// 	socketRef.current.readyState === WebSocket.OPEN
-			// ) {
-			// 	socketRef.current.send(value.name);
-			// }
+			if (
+				socketRef.current &&
+				socketRef.current.readyState === WebSocket.OPEN
+			) {
+				socketRef.current.send(value.name);
+			}
 		},
 	});
 
-	// useEffect(() => {
-	// 	socketRef.current = ws;
+	useEffect(() => {
+		socketRef.current = ws;
 
-	// 	const messageHandler = (event: MessageEvent) => {
-	// 		if (webSocketResponseInputRef.current) {
-	// 			webSocketResponseInputRef.current.value = event.data;
-	// 		}
-	// 	};
+		const messageHandler = (event: MessageEvent) => {
+			if (webSocketResponseInputRef.current) {
+				webSocketResponseInputRef.current.value = event.data;
+			}
+		};
 
-	// 	socketRef.current?.addEventListener("message", messageHandler);
+		socketRef.current?.addEventListener("message", messageHandler);
 
-	// 	return () => {
-	// 		socketRef.current?.removeEventListener("message", messageHandler);
-	// 	};
-	// }, []);
+		return () => {
+			socketRef.current?.removeEventListener("message", messageHandler);
+		};
+	}, []);
 
 	return (
 		<div className="space-y-4">
@@ -113,11 +114,11 @@ export function APITester() {
 				readOnly
 				placeholder="API response will appear here..."
 			/>
-			{/* <Input
+			<Input
 				ref={webSocketResponseInputRef}
 				readOnly
 				placeholder="WebSocket response will appear here..."
-			/> */}
+			/>
 			<Textarea value={JSON.stringify(user, null, 2)} readOnly rows={4} />
 			<Textarea value={JSON.stringify(users, null, 2)} readOnly rows={10} />
 		</div>

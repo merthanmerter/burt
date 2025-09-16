@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/trpc/[trpc].ts": {
-      "runtime": "edge"
-    }
-  }
-}
