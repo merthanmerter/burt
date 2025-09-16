@@ -1,18 +1,7 @@
 {
-  "buildCommand": "bun run build",
-  "outputDirectory": "public",
-  "routes": [
-    {
-      "src": "/trpc/(.*)",
-      "dest": "/src/server/trpc"
-    },
-    {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+  "functions": {
+    "api/trpc/[trpc].ts": {
+      "runtime": "edge"
     }
-  ]
+  }
 }

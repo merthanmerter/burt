@@ -1,6 +1,6 @@
 import { serve } from "bun";
 import index from "./index.html";
-import trpcHandler from "./server/trpc";
+// import trpcServer from "./server/trpc";
 
 // import websocket from "./server/ws";
 
@@ -8,11 +8,6 @@ const server = serve({
 	port: 3000,
 	routes: {
 		"/*": index,
-		"/trpc/*": trpcHandler,
-		// "/ws": (req) => {
-		// 	server.upgrade(req);
-		// 	return undefined;
-		// },
 	},
 	// websocket,
 	development: process.env.NODE_ENV !== "production" && {
