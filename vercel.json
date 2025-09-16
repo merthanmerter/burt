@@ -1,11 +1,6 @@
 {
   "buildCommand": "bun run build",
   "outputDirectory": "public",
-  "functions": {
-    "src/server/trpc.ts": {
-      "runtime": "@vercel/node"
-    }
-  },
   "routes": [
     {
       "src": "/trpc/(.*)",
