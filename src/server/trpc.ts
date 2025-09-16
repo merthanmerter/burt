@@ -76,15 +76,13 @@ export const appRouter = t.router({
 	},
 });
 
-export default {
-	async fetch(req: Request): Promise<Response> {
-		return fetchRequestHandler({
-			endpoint: "/trpc",
-			req,
-			router: appRouter,
-			createContext,
-		});
-	},
-};
+export default async function handler(req: Request): Promise<Response> {
+	return fetchRequestHandler({
+		endpoint: "/trpc",
+		req,
+		router: appRouter,
+		createContext,
+	});
+}
 
 export type AppRouter = typeof appRouter;

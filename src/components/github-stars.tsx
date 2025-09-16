@@ -15,21 +15,17 @@ export const GitHubStars = () => {
 	});
 
 	return (
-		<Button
-			size="sm"
-			variant="outline"
-			render={
-				<a
-					target="_blank"
-					href="https://github.com/merthanmerter/burt"
-					rel="noopener"
-				>
-					<StarIcon className="size-4 fill-yellow-500 stroke-yellow-500" />
-					<span>{stars?.stargazers_count}</span>
-					<EyeIcon className="size-4 stroke-muted-foreground" />
-					<span>{stars?.watchers_count}</span>
-				</a>
-			}
-		/>
+		<a
+			target="_blank"
+			href="https://github.com/merthanmerter/burt"
+			rel="noopener"
+		>
+			<Button size="sm" variant="outline">
+				<StarIcon className="size-4 fill-yellow-500 stroke-yellow-500" />
+				<span>{stars?.stargazers_count}</span>
+				<EyeIcon className="size-4 stroke-muted-foreground" />
+				<span>{stars?.watchers_count}</span>
+			</Button>
+		</a>
 	);
 };

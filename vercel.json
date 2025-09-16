@@ -1,0 +1,19 @@
+{
+  "buildCommand": "bun run build",
+  "outputDirectory": "public",
+  "functions": {
+    "src/server/trpc.ts": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "routes": [
+    {
+      "src": "/trpc/(.*)",
+      "dest": "/src/server/trpc"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}

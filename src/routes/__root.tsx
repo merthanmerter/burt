@@ -46,20 +46,23 @@ function Root() {
 					Readme
 				</Link>
 				<div className="ml-auto flex items-center gap-2">
-					<Button variant="outline" size="icon" asChild>
-						<a
-							href="https://github.com/merthanmerter/bun-react-trpc"
-							target="_blank"
-							className=""
-							rel="noopener"
-						>
-							<img
-								src={githubLogo}
-								alt="GitHub Logo"
-								className="size-5 hover:scale-110 transition-transform duration-200 dark:invert"
-							/>
-						</a>
-					</Button>
+					<Button
+						variant="outline"
+						size="icon"
+						render={
+							<a
+								href="https://github.com/merthanmerter/bun-react-trpc"
+								target="_blank"
+								rel="noopener"
+							>
+								<img
+									src={githubLogo}
+									alt="GitHub Logo"
+									className="size-5 hover:scale-110 transition-transform duration-200 dark:invert"
+								/>
+							</a>
+						}
+					/>
 					<ModeToggle />
 				</div>
 			</nav>

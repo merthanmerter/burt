@@ -1,3 +1,4 @@
+import biomeLogo from "@/components/logo/biome.svg";
 import bunLogo from "@/components/logo/bun.svg";
 import reactLogo from "@/components/logo/react.svg";
 import shadcnLogo from "@/components/logo/shadcn.svg";
@@ -41,6 +42,11 @@ export default function LogoArea() {
 			/>
 			<img
 				src={zodLogo}
+				alt="Zod Logo"
+				className="size-8 sm:size-12 hover:scale-110 transition-transform duration-200"
+			/>
+			<img
+				src={biomeLogo}
 				alt="Zod Logo"
 				className="size-8 sm:size-12 hover:scale-110 transition-transform duration-200"
 			/>

@@ -1,6 +1,6 @@
 import { serve } from "bun";
 import index from "./index.html";
-import trpcServer from "./server/trpc";
+import trpcHandler from "./server/trpc";
 
 // import websocket from "./server/ws";
 
@@ -8,7 +8,7 @@ const server = serve({
 	port: 3000,
 	routes: {
 		"/*": index,
-		"/trpc/*": trpcServer.fetch,
+		"/trpc/*": trpcHandler,
 		// "/ws": (req) => {
 		// 	server.upgrade(req);
 		// 	return undefined;
