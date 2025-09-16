@@ -27,7 +27,7 @@ function Page() {
 					<div className="space-y-4">
 						<Skeleton className="h-[36px]" />
 						<Skeleton className="h-[36px]" />
-						<Skeleton className="h-[36px]" />
+						{/* <Skeleton className="h-[36px]" /> */}
 						<Skeleton className="h-[98px]" />
 						<Skeleton className="h-[218px]" />
 					</div>

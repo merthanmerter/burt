@@ -114,11 +114,11 @@ export function APITester() {
 				readOnly
 				placeholder="API response will appear here..."
 			/>
-			<Input
+			{/* <Input
 				ref={webSocketResponseInputRef}
 				readOnly
 				placeholder="WebSocket response will appear here..."
-			/>
+			/> */}
 			<Textarea value={JSON.stringify(user, null, 2)} readOnly rows={4} />
 			<Textarea value={JSON.stringify(users, null, 2)} readOnly rows={10} />
 		</div>
