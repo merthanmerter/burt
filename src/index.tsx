@@ -1,28 +1,19 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { Hono } from "hono";
 import { appRouter, createContext } from "./server/trpc";
 
-const app = new Hono();
-
-// API routes
-app.all("/api/trpc/*", async (c) => {
-	return fetchRequestHandler({
-		endpoint: "/api/trpc",
-		req: c.req.raw,
-		router: appRouter,
-		createContext,
-	});
-});
-
-// For local development with Bun
 const server = Bun.serve({
 	port: 3000,
 	async fetch(req) {
 		const url = new URL(req.url);
 
-		// Handle API routes with Hono
-		if (url.pathname.startsWith("/api/")) {
-			return app.fetch(req);
+		// Handle tRPC API routes
+		if (url.pathname.startsWith("/api/trpc")) {
+			return fetchRequestHandler({
+				endpoint: "/api/trpc",
+				req,
+				router: appRouter,
+				createContext,
+			});
 		}
 
 		// Try to serve static file from public directory
