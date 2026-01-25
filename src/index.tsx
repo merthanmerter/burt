@@ -1,17 +1,16 @@
-import { serve } from "bun";
-import index from "./index.html";
-import trpcServer from "./server/trpc";
+import { serveStatic } from "hono/bun";
+import app from "./server/app";
 
-const server = serve({
+// Serve static files from public directory
+app.use("/*", serveStatic({ root: "./public" }));
+
+// SPA fallback - serve index.html for all other routes
+app.get("*", serveStatic({ path: "./public/index.html" }));
+
+// For local development with Bun
+const server = Bun.serve({
 	port: 3000,
-	routes: {
-		"/*": index,
-		"/trpc/*": trpcServer.fetch,
-	},
-	development: process.env.NODE_ENV !== "production" && {
-		hmr: true,
-		console: true,
-	},
+	fetch: app.fetch,
 });
 
-console.log(`🚀 ${process.env.NODE_ENV} server running at ${server.url}`);
+console.log(`🚀 Server running at http://localhost:${server.port}`);

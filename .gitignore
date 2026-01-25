@@ -7,6 +7,9 @@ public
 bin
 *.tgz
 
+# vercel
+.vercel
+
 # code coverage
 coverage
 *.lcov

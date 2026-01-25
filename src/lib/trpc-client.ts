@@ -10,7 +10,7 @@ import { queryClient } from "./query-client";
 export const trpcClient = createTRPCClient<AppRouter>({
 	links: [
 		httpBatchStreamLink({
-			url: "/trpc",
+			url: "/api/trpc",
 			transformer,
 		}),
 	],

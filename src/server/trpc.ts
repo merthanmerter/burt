@@ -1,8 +1,5 @@
 import { initTRPC } from "@trpc/server";
-import {
-	type FetchCreateContextFnOptions,
-	fetchRequestHandler,
-} from "@trpc/server/adapters/fetch";
+import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import superjson from "superjson";
 import { z } from "zod";
 import { db } from "./db";
@@ -75,16 +72,5 @@ export const appRouter = t.router({
 		}),
 	},
 });
-
-export default {
-	async fetch(req: Request): Promise<Response> {
-		return fetchRequestHandler({
-			endpoint: "/trpc",
-			req,
-			router: appRouter,
-			createContext,
-		});
-	},
-};
 
 export type AppRouter = typeof appRouter;
