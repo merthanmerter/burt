@@ -1,11 +1,10 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { Hono } from "hono";
-import { serveStatic } from "hono/bun";
 import { appRouter, createContext } from "./server/trpc";
 
 const app = new Hono();
 
-// 1. API routes first (before static middleware)
+// API routes
 app.all("/api/trpc/*", async (c) => {
 	return fetchRequestHandler({
 		endpoint: "/api/trpc",
@@ -15,16 +14,29 @@ app.all("/api/trpc/*", async (c) => {
 	});
 });
 
-// 2. Serve static files from public directory
-app.use("/*", serveStatic({ root: "./public" }));
-
-// 3. SPA fallback - serve index.html for client-side routing
-app.get("*", serveStatic({ path: "./public/index.html" }));
-
 // For local development with Bun
 const server = Bun.serve({
 	port: 3000,
-	fetch: app.fetch,
+	async fetch(req) {
+		const url = new URL(req.url);
+
+		// Handle API routes with Hono
+		if (url.pathname.startsWith("/api/")) {
+			return app.fetch(req);
+		}
+
+		// Try to serve static file from public directory
+		const filePath = `./public${url.pathname}`;
+		const file = Bun.file(filePath);
+		if (await file.exists()) {
+			return new Response(file);
+		}
+
+		// SPA fallback - serve index.html for client-side routing
+		return new Response(Bun.file("./public/index.html"), {
+			headers: { "Content-Type": "text/html" },
+		});
+	},
 });
 
 console.log(`🚀 Server running at http://localhost:${server.port}`);
