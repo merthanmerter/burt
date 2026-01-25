@@ -44,3 +44,4 @@ bun.lock
 .tanstack
 
 routeTree.gen.ts
+.env*.local
