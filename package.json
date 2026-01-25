@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k -n TAILWIND,SERVER,TSR -c green,cyan,yellow \"bun run tailwind:watch\" \"bun run dev:server\" \"bun run watch-routes\"",
+    "dev": "concurrently -k -n TAILWIND,SERVER,CLIENT,TSR -c green,cyan,magenta,yellow \"bun run tailwind:watch\" \"bun run dev:server\" \"bun run dev:client\" \"bun run watch-routes\"",
     "dev:server": "bun --hot src/index.tsx",
+    "dev:client": "bun build ./src/index.html --outdir=public --target=browser --watch",
     "start": "bun src/index.tsx",
     "build": "bun run build:client",
     "build:client": "NODE_ENV=production rm -rf public && bun build ./src/index.html --outdir=public --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\\\"production\\\"' --env='BUN_PUBLIC_*'",
