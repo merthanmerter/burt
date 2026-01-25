@@ -17,7 +17,12 @@
     "tailwind:watch": "tailwindcss -i ./src/styles/index.css -o ./src/styles/output.css --watch --minify",
     "lint": "biome check . --write",
     "format": "biome format --write .",
-    "test": "bun test"
+    "test": "bun test",
+    "compile": "bun run prebuild && bun run compile:macos64 && bun run compile:macosarm64 && bun run compile:linux64 && bun run compile:windows64",
+    "compile:macos64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-darwin-x64 --outfile=bin/macos/index",
+    "compile:macosarm64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-darwin-arm64 --outfile=bin/macos/index",
+    "compile:linux64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-linux-x64 --outfile=bin/linux/index",
+    "compile:windows64": "NODE_ENV=production bun build ./src/index.tsx --compile --minify --target=bun-windows-x64 --outfile=bin/windows/index"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",
