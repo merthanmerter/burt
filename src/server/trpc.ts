@@ -37,9 +37,12 @@ export const appRouter = t.router({
 				.parse({ message: `Hello, ${input.name}` });
 		}),
 	readme: publicProcedure.query(async () => {
-		const localReadme = await Bun.file("README.md")
-			.text()
-			.catch(() => null);
+		const localReadme =
+			typeof Bun === "undefined"
+				? null
+				: await Bun.file("README.md")
+						.text()
+						.catch(() => null);
 
 		if (localReadme) return localReadme;
 
