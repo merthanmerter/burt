@@ -18,7 +18,7 @@
     "compile": "bun scripts/compile.ts"
   },
   "dependencies": {
-    "@base-ui-components/react": "^1.0.0-rc.0",
+    "@base-ui/react": "^1.4.1",
     "@tanstack/react-form": "^1.29.2",
     "@tanstack/react-query": "^5.100.9",
     "@tanstack/react-query-devtools": "^5.100.9",
