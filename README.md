@@ -1,4 +1,6 @@
-# bun-react-trpc-template
+<p align="center">
+  <img src="src/components/logo/burt-logo.png" alt="Burt" width="200" />
+</p>
 
 This template is designed to help you build fullstack apps powered by **Bun**,
 **React**, and **tRPC**, with a unique twist: you can **compile the entire app
