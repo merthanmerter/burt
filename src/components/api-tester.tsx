@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useTRPC } from "@/lib/trpc-client";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Spinner } from "./ui/spinner";
 import { Textarea } from "./ui/textarea";
 
 export function APITester() {
@@ -39,9 +40,12 @@ export function APITester() {
 				name: z.string().min(1, "Name is required"),
 			}),
 		},
-		onSubmit: ({ value }) => {
+		onSubmit: async ({ value }) => {
+			// mock time out
+			/* await new Promise((resolve) => setTimeout(resolve, 1000)); */
+
 			// api call
-			helloMutation.mutate({ name: value.name });
+			await helloMutation.mutateAsync({ name: value.name });
 
 			// websocket send
 			if (
@@ -85,8 +89,9 @@ export function APITester() {
 					selector={(state) => [state.canSubmit, state.isSubmitting]}
 				>
 					{([canSubmit, isSubmitting]) => (
-						<Button type="submit" disabled={!canSubmit}>
-							{isSubmitting ? "Submitting..." : "Submit"}
+						<Button type="submit" disabled={!canSubmit || isSubmitting}>
+							{isSubmitting && <Spinner data-icon="inline-start" />}
+							Submit
 						</Button>
 					)}
 				</form.Subscribe>
