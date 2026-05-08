@@ -1,26 +1,29 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import index from "./index.html";
 import { appRouter, createContext } from "./server/trpc";
 
+function handleTrpc(req: Request) {
+	return fetchRequestHandler({
+		endpoint: "/api/trpc",
+		req,
+		router: appRouter,
+		createContext,
+	});
+}
+
 Bun.serve({
-	port: 3000,
-	async fetch(req) {
-		const path = new URL(req.url).pathname;
-
-		// API
-		if (path.startsWith("/api/trpc")) {
-			return fetchRequestHandler({
-				endpoint: "/api/trpc",
-				req,
-				router: appRouter,
-				createContext,
-			});
-		}
-
-		// Static files
-		const file = Bun.file(`./public${path}`);
-		if (await file.exists()) return new Response(file);
-
-		// SPA fallback
-		return new Response(Bun.file("./public/index.html"));
+	port: Number(process.env.PORT ?? 3000),
+	routes: {
+		"/api/trpc": handleTrpc,
+		"/api/trpc/*": handleTrpc,
+		"/": index,
+		"/*": index,
 	},
+	development:
+		process.env.NODE_ENV !== "production"
+			? {
+					hmr: true,
+					console: true,
+				}
+			: false,
 });

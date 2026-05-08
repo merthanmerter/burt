@@ -1,5 +1,5 @@
 
-.PHONY: help install dev build clean compile compile-all
+.PHONY: help install dev build clean compile run
 
 # Default target
 help:
@@ -40,6 +40,13 @@ compile:
 
 # Run the compiled binary
 run:
-	./bin/macos/index
-	./bin/linux/index
-	./bin/windows/index
+	@case "$$(uname -s)" in \
+		Darwin) \
+			if [ "$$(uname -m)" = "arm64" ]; then ./bin/macos/index-arm64; else ./bin/macos/index; fi ;; \
+		Linux) \
+			./bin/linux/index ;; \
+		MINGW*|MSYS*|CYGWIN*) \
+			./bin/windows/index.exe ;; \
+		*) \
+			echo "Unsupported OS: $$(uname -s)" >&2; exit 1 ;; \
+	esac

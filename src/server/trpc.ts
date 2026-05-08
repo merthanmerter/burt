@@ -37,17 +37,21 @@ export const appRouter = t.router({
 				.parse({ message: `Hello, ${input.name}` });
 		}),
 	readme: publicProcedure.query(async () => {
-		const response = await fetch(
+		const localReadme = await Bun.file("README.md")
+			.text()
+			.catch(() => null);
+
+		if (localReadme) return localReadme;
+
+		const remoteReadme = await fetch(
 			"https://raw.githubusercontent.com/merthanmerter/burt/main/README.md",
 		)
 			.then((res) => (res.ok ? res.text() : null))
 			.catch(() => null);
 
-		if (response) return response;
+		if (remoteReadme) return remoteReadme;
 
-		return await Bun.file("README.md")
-			.text()
-			.catch(() => "README.md not available");
+		return "README.md not available";
 	}),
 	users: {
 		find: publicProcedure
