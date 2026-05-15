@@ -1,4 +1,4 @@
-import { handleTrpc } from "../../src/server/trpc";
+import { handleTrpc } from "@/server/trpc";
 
 export default {
 	async fetch(req: Request) {
