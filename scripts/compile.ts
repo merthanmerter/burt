@@ -1,43 +1,28 @@
 import tailwind from "bun-plugin-tailwind";
 
-type CompileTarget = {
-	label: string;
-	target: Bun.Build.Target;
-	outfile: string;
-};
+process.env.NODE_ENV = "production";
 
-const targets: CompileTarget[] = [
+const outputs: Bun.CompileBuildOptions[] = [
 	{
-		label: "macOS x64",
 		target: "bun-darwin-x64",
 		outfile: "./bin/macos/index",
 	},
 	{
-		label: "macOS arm64",
 		target: "bun-darwin-arm64",
 		outfile: "./bin/macos/index-arm64",
 	},
 	{
-		label: "Linux x64",
 		target: "bun-linux-x64",
 		outfile: "./bin/linux/index",
 	},
 	{
-		label: "Windows x64",
 		target: "bun-windows-x64",
 		outfile: "./bin/windows/index",
 	},
 ];
 
-process.env.NODE_ENV = "production";
-
-async function runStep(name: string, command: Promise<unknown>) {
-	console.log(`\n> ${name}`);
-	await command;
-}
-
-async function compile(target: CompileTarget) {
-	console.log(`\n> compile ${target.label}`);
+async function compile(output: Bun.CompileBuildOptions) {
+	console.log(`\n> compile ${output.target}`);
 
 	try {
 		await Bun.build({
@@ -48,8 +33,8 @@ async function compile(target: CompileTarget) {
 			},
 			plugins: [tailwind],
 			compile: {
-				target: target.target,
-				outfile: target.outfile,
+				target: output.target,
+				outfile: output.outfile,
 			},
 		});
 	} catch (error) {
@@ -57,14 +42,14 @@ async function compile(target: CompileTarget) {
 		process.exit(1);
 	}
 
-	console.log(`  ${target.outfile}`);
+	console.log(`  ${output.outfile}`);
 }
 
-await runStep("generate routes", Bun.$`tsr generate`);
-await runStep("lint", Bun.$`biome check . --write`);
-await runStep("format", Bun.$`biome format --write .`);
-await runStep("test", Bun.$`bun test`);
+await Bun.$`tsr generate`;
+await Bun.$`biome check . --write`;
+await Bun.$`biome format --write .`;
+await Bun.$`bun test`;
 
-for (const target of targets) {
-	await compile(target);
+for (const output of outputs) {
+	await compile(output);
 }

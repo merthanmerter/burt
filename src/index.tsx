@@ -21,9 +21,6 @@ Bun.serve({
 	},
 	development:
 		process.env.NODE_ENV !== "production"
-			? {
-					hmr: true,
-					console: true,
-				}
+			? { hmr: true, console: true }
 			: false,
 });
