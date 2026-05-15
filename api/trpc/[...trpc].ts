@@ -1,5 +1,7 @@
-import { handleTrpc } from "@/server/trpc";
+import { handleTrpc } from "../../src/server/trpc";
 
-export default function handler(req: Request) {
-	return handleTrpc(req);
-}
+export default {
+	async fetch(req: Request) {
+		return handleTrpc(req);
+	},
+};
