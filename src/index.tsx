@@ -1,18 +1,10 @@
-import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import { handleTrpc } from "@/server/trpc";
 import index from "./index.html";
-import { appRouter, createContext } from "./server/trpc";
 
-function handleTrpc(req: Request) {
-	return fetchRequestHandler({
-		endpoint: "/api/trpc",
-		req,
-		router: appRouter,
-		createContext,
-	});
-}
+const port = Number(process.env.PORT ?? 3000);
 
 Bun.serve({
-	port: Number(process.env.PORT ?? 3000),
+	port,
 	routes: {
 		"/api/trpc": handleTrpc,
 		"/api/trpc/*": handleTrpc,
@@ -24,3 +16,5 @@ Bun.serve({
 			? { hmr: true, console: true }
 			: false,
 });
+
+console.log(`→ http://localhost:${port}`);
