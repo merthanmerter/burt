@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="src/components/logo/burt-logo.png" alt="Burt" width="200" />
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="src/components/logo/burt-logo-black.png" />
+    <img src="src/components/logo/burt-logo-white.png" alt="Burt" width="200" />
+  </picture>
 </p>
 
 This template is designed to help you build fullstack apps powered by **Bun**,
