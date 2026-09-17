@@ -1,7 +1,7 @@
-import burtLogoWhite from "@/components/logo/burt-logo-white.png";
-import { useTRPC } from "@/lib/trpc-client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { marked } from "marked";
+import burtLogoWhite from "@/components/logo/burt-logo-white.png";
+import { useTRPC } from "@/lib/trpc-client";
 
 export default function ReadmeMarkdown() {
 	const trpc = useTRPC();

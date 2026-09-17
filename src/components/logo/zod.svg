@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="203" viewBox="0 0 256 203">
+  xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="203" viewBox="0 0 256 203"><title>Zod</title>
   <defs>
     <filter id="a" width="105.2%" height="106.5%" x="-2.2%" y="-2.8%" filterUnits="objectBoundingBox">
       <feOffset dx="1" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
